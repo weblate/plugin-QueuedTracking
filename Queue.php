@@ -79,7 +79,7 @@ class Queue
      * @return RequestSet[]
      */
     public function getRequestSetsToProcess()
-    {echo "num requests to process: ".$this->numRequestsToProcessInBulk."\n";
+    {;
         $values = $this->backend->getFirstXValuesFromList($this->key, $this->numRequestsToProcessInBulk);
 
         $requests = array();
