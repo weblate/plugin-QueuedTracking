@@ -97,7 +97,7 @@ class Redis implements Backend
         if ($numValues <= 0) {
             return array();
         }
-        echo "num values: ".$numValues."\n"
+        echo "num values: ".$numValues."\n";
         $this->connectIfNeeded();
         $values = $this->redis->lRange($key, 0, $numValues - 1);
 
