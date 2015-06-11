@@ -152,7 +152,8 @@ class Manager
     {
         $total = 0;
 
-        foreach ($this->getAllQueues() as $queue) {
+        foreach ($this->getAllQueues() as $idx => $queue) {
+            echo 'queue ' . $idx . ' - count: ' . $queue->getNumberOfRequestSetsInQueue() . "\n";
             $total += $queue->getNumberOfRequestSetsInQueue();
         }
 
