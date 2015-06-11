@@ -43,8 +43,7 @@ class Handler extends Tracker\Handler
         $tracker->setCountOfLoggedRequests($requestSet->getNumberOfRequests());
 
         $this->sendResponseNow($tracker, $requestSet);
-echo "is allowed: ".$this->isAllowedToProcessInTrackerMode()."\n";
-        echo "can acquire: ".$queueManager->canAcquireMoreLocks()."\n";
+
         if ($this->isAllowedToProcessInTrackerMode() && $queueManager->canAcquireMoreLocks()) {
             $this->processQueue($queueManager);
         }

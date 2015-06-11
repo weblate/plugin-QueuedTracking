@@ -201,6 +201,7 @@ class HandlerTest extends IntegrationTestCase
 
     public function test_process_ShouldWriteRequestsToQueue()
     {
+        $this->handler->enableProcessingInTrackerMode();
         $this->assertSame(0, $this->queue->getNumberOfRequestSetsInAllQueues());
 
         $this->processDummyRequests();
