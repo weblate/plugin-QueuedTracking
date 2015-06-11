@@ -207,6 +207,8 @@ end';
 
     private function connect()
     {
+        echo print_r(array($this->host, $this->port, $this->timeout), true);
+
         $this->redis = new \Redis();
         $success = $this->redis->connect($this->host, $this->port, $this->timeout, null, 100);
 
