@@ -45,6 +45,7 @@ class Handler extends Tracker\Handler
         $this->sendResponseNow($tracker, $requestSet);
 
         if ($this->isAllowedToProcessInTrackerMode() && $queueManager->canAcquireMoreLocks()) {
+            echo "processing\n";
             $this->processQueue($queueManager);
         }
     }
