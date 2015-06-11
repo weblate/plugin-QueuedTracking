@@ -83,6 +83,7 @@ class Redis implements Backend
         $this->connectIfNeeded();
 
         foreach ($values as $value) {
+            echo "appending?\n";
             $this->redis->rPush($key, $value);
         }
 

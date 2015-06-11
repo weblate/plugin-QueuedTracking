@@ -66,7 +66,7 @@ class Queue
 
         $value = $requests->getState();
         $value = json_encode($value);
-echo "appending: $value\n";
+
         $this->backend->appendValuesToList($this->key, array($value));
     }
 
