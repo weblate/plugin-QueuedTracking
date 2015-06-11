@@ -144,7 +144,6 @@ class Manager
             $requestSet->setRequests($requests);
 
             $queue = $this->createQueue($queueId);
-            echo "adding request set: ".$requestSet->getNumberOfRequests()."\n";
             $queue->addRequestSet($requestSet);
         }
     }
