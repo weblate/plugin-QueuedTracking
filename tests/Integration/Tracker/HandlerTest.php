@@ -214,8 +214,11 @@ class HandlerTest extends IntegrationTestCase
         // verify
         $this->queue->setNumberOfRequestsToProcessAtSameTime(2);
 
+        echo "num1: ".$this->queue->getNumberOfRequestSetsInAllQueues()."\n";
         // those requests  will be written into queue 1
-        $requestSet = $this->queue->createQueue($id = 1)->getRequestSetsToProcess();
+        $theQueue = $this->queue->createQueue($id = 1);
+        echo "num2: ".$this->queue->getNumberOfRequestSetsInAllQueues()."\n";
+        $requestSet = $theQueue->getRequestSetsToProcess();
         $this->assertCount(2, $requestSet);
 
         $requests = $requestSet[0]->getRequests();
