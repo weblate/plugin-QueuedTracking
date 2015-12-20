@@ -72,12 +72,13 @@ class Analyze extends ConsoleCommand
             'invalidRequests' => 0,
             'useVisitorIdForSharding' => 0,
             'useIPForSharding' => 0,
+            'requestSetsWithMultipleRequests' => 0,
+            'requestSetsWithOneRequest' => 0
         );
 
         $this->numQueuesAvailable = $manager->getNumberOfAvailableQueues();
         $oldDistribution = array_fill_keys(range(0, $this->numQueuesAvailable - 1), 0);
         $newDistribution = array_fill_keys(range(0, $this->numQueuesAvailable - 1), 0);
-
 
         foreach ($manager->getAllQueues() as $index => $queue) {
             $end = $queue->getNumberOfRequestSetsInQueue();
@@ -99,6 +100,12 @@ class Analyze extends ConsoleCommand
 
                     $requestSet = new Tracker\RequestSet();
                     $requestSet->restoreState($params);
+
+                    if ($requestSet->getNumberOfRequests() <= 1) {
+                        $stats['requestSetsWithOneRequest']++;
+                    } else {
+                        $stats['requestSetsWithMultipleRequests']++;
+                    }
 
                     foreach ($requestSet->getRequests() as $request) {
                         if ($request->getForcedUserId()) {
@@ -131,9 +138,8 @@ class Analyze extends ConsoleCommand
 
                 $statsReadable = $this->toReadableArray($stats);
 
-                $message = sprintf('Currently analyzing queue %d of %d (%d of about %d requests). Stats: %s, OldDistribution: %s, NewDistribution: %s        ', $queue->getId() + 1, $this->numQueuesAvailable, $start + 25, $end, implode(', ', $statsReadable), implode(' + ', $oldDistribution), implode(' + ', $newDistribution));
-                $output->write("\x0D");
-                $output->write($message);
+                $message = sprintf('Currently analyzing queue %d of %d (%d of about %d request sets). Stats: %s, OldDistribution: %s, NewDistribution: %s        ', $queue->getId() + 1, $this->numQueuesAvailable, $start + 25, $end, implode(', ', $statsReadable), implode(' + ', $oldDistribution), implode(' + ', $newDistribution));
+                $output->writeln($message);
             }
         }
 
@@ -144,7 +150,7 @@ class Analyze extends ConsoleCommand
         ksort($this->startingLetter, SORT_NATURAL);
         $readableLetters = $this->toReadableArray($this->startingLetter);
         $output->writeln(sprintf('Starting letter analysis: %s', implode(', ', $readableLetters)));
-        $output->writeln(sprintf('Analysed %d requests in %d second(s)', array_sum($oldDistribution), ceil($diff)));
+        $output->writeln(sprintf('Analysed %d requests within %d request sets in %d second(s)', array_sum($oldDistribution), $stats['requestSetsWithOneRequest'] + $stats['requestSetsWithMultipleRequests'], ceil($diff)));
     }
 
     private function toReadableArray($arrayKeyValue)
